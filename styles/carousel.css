@@ -8,13 +8,16 @@ body {
   font-size: 16px;
 }
 
-h1 {
+h1, h2 {
   color: var(--blue);
 }
 
 .p .a11y-hide-on-mobile {
   display:none;
 }
+
+.show-on-error{ display: none; }
+.show-on-error.error { display: block; }
 
 button {
   font-family: 'Merriweather', serif;
@@ -59,35 +62,51 @@ button {
 }
 
 .carousel-container {
-  
+  padding:20px;
+  position: relative;
 }
 
 .carousel-list {
   list-style-type:none; 
   margin: 0;
   padding: 0;
-  white-space: nowrap;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }
 
 .carousel-list li {
-  display: inline-block;
+  margin:20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 357px auto;
+  grid-template-areas: "image" "title";
+  align-content: stretch;
+  align-items: center;
+  justify-content: center;
+  text-align:center;
 }
 
 .carousel-list img {
-  width: 320px;
-  height: 357px;
+  grid-area: image;
+  max-width: 320px;
+  max-height: 357px;
+}
+
+.carousel-list h2 {
+  grid-area: title;
 }
 
 .carousel-controls {
-  
   text-align: center;
 }
 
 .p .carousel-controls {
-  position: relative;
-  background: #70c4a2;
-  padding: 100px;
-  pointer-events: none;
+  position: absolute;
+  height:357px;
+  width: 320px;
+  top: 218px;
+  left:40px;
 }
 
 .show-on-error { display: none; }

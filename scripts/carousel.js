@@ -22,41 +22,89 @@ This will return an object with a `hits` property, which will be an array of ima
 
   const container = document.querySelector('#carousel .carousel-list');
   const errorContainer = document.querySelector('.show-on-error');
+  const controlsContainer = document.querySelector('.carousel-controls');
 
-  let images = {};
+  let images = [];
 
-  function renderImage(url, height, width) {
+  function renderImages() {
+    images.map(image => renderImage(image));
+    container.style.width=`${container.getBoundingClientRect().width}px`;
+  }
+
+  function renderImage({id, small, tags}) {
     const img = document.createElement('IMG');
-    //img.height=height;
-   // img.width=width;
-    img.src=url;
+    img.src=small;
+    img.alt=`${tags}`;
+    img.id=`image-${id}`;
+    const title = document.createElement('H2');
+    title.innerText = img.alt;
     const li = document.createElement('LI');
     li.className = 'carousel-image';
     li.appendChild(img);
+    li.appendChild(title);
     container.appendChild(li);
   }
 
-  
+  function removeImage(id){
+    const imageToRemove = document.getElementById(`image-${id}`);
+    if (imageToRemove) {
+      const li = imageToRemove.closest('.carousel-image');
+      container.removeChild(li);
+    }
+  }
+
+  function navigate(direction) {
+    console.log('dir', direction);
+    // append the first array item to the end, or vice versa
+    // render new image
+    // remove the original item from the start/end as appropriate.
+    // remove old image
+  }
+
   if (container) {
+    errorContainer.classList.remove('error');
+    images.length = 0;
     fetch(searchUrl)
     .then(
       function(response) {
         if (response.status !== 200) {
           console.log('There was an error fetching images: ', response);
+          errorContainer.innerText = response;
+          errorContainer.classList.add('error');
           return;
         }
         response.json().then(function(data) {
           if (data.hits) {
             data.hits.map(hit => {
-              renderImage(hit.largeImageURL, hit.imageHeight, hit.imageWidth, hit.previewURL)
+              console.log('hit',hit)
+              images.push({
+                id : hit.id,
+                small : hit.webformatURL,
+                height : hit.webformatHeight,
+                width : hit.webformatWidth,
+                fullSize : hit.largeImageURL,
+                fullHeight : hit.imageHeight,
+                fullWidth : hit.imageWidth,
+                tags : hit.tags,
+                user : hit.user,
+              });
             });
+            renderImages();
           }
         });
       }
     )
     .catch(function(err) {
       console.log('There was an error fetching images: ', err);
+      errorContainer.innerText = err;
+      errorContainer.classList.add('error');
     });
+
+    if (controlsContainer) {
+      controlsContainer.querySelectorAll('button').forEach(button => {
+        button.onclick = () => navigate(button.className);
+      });
+    }
   
   }
 })()
