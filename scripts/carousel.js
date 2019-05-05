@@ -54,11 +54,22 @@ This will return an object with a `hits` property, which will be an array of ima
   }
 
   function navigate(direction) {
-    console.log('dir', direction);
-    // append the first array item to the end, or vice versa
-    // render new image
-    // remove the original item from the start/end as appropriate.
-    // remove old image
+    let toAdd = null;
+    switch (direction) {
+      case 'prev':
+        toAdd = images.pop();
+        images.splice(0, 0, toAdd); 
+        break;
+      case 'next':
+      toAdd = images.shift();
+      images.push(toAdd);
+        break;
+    } 
+
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
+    renderImages();
   }
 
   if (container) {
