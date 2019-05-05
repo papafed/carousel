@@ -5,13 +5,13 @@
     <script>
       (function(m,c,a,b){
         if (m && c) {
-          let i, q=[ m(a+0+b), m(a+500+b) ]
+          let i, q=[ m(a+0+b), m(a+808+b) ]
           function f(){
             c.remove('p','d');
             if (q[1].matches) c.add('d');
             else if (q[0].matches) c.add('p');
             else c.add('d');
-            //window.dispatchEvent(new Event('breakpoint'));
+            window.dispatchEvent(new Event('breakpoint'));
           }
           for (i=0; i<q.length; i++){ f(q[i]); q[i].addListener(f); }
         }

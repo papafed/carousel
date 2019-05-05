@@ -17,40 +17,49 @@ This will return an object with a `hits` property, which will be an array of ima
   const apiUrl = 'https://pixabay.com/api/';
   const apiKey = '9656065-a4094594c34f9ac14c7fc4c39';
   const max = 6;
-  const searchTerm='beautiful+landscape';
+  const searchTerm='aston+martin';
   const searchUrl=`${apiUrl}?key=${apiKey}&q=${searchTerm}&image_type=photo&page=1&per_page=${max}`;
 
-  const container = document.querySelector('#carousel .carousel-list');
+  const appContainer = document.querySelector('.carousel-container');
+  const container = document.querySelector('.carousel-list');
   const errorContainer = document.querySelector('.show-on-error');
   const controlsContainer = document.querySelector('.carousel-controls');
-
+  const marginWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--imageMargin'),10) * 2;
+  const imageWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--imageWidth'),10) + marginWidth;
+  
   let images = [];
+
+  function reflow() {
+   
+    appContainer.style.width='';
+    const width=appContainer.getBoundingClientRect().width;
+    // how many images are completely visible on the screen?
+     appContainer.style.width = (Math.floor(width / imageWidth) * imageWidth) + 'px';
+  }
 
   function renderImages() {
     images.map(image => renderImage(image));
-    container.style.width=`${container.getBoundingClientRect().width}px`;
   }
 
-  function renderImage({id, small, tags}) {
+  function renderImage({id, small, tags, fullSize}) {
+    
     const img = document.createElement('IMG');
     img.src=small;
     img.alt=`${tags}`;
     img.id=`image-${id}`;
+
     const title = document.createElement('H2');
     title.innerText = img.alt;
-    const li = document.createElement('LI');
-    li.className = 'carousel-image';
-    li.appendChild(img);
-    li.appendChild(title);
-    container.appendChild(li);
-  }
 
-  function removeImage(id){
-    const imageToRemove = document.getElementById(`image-${id}`);
-    if (imageToRemove) {
-      const li = imageToRemove.closest('.carousel-image');
-      container.removeChild(li);
-    }
+    const a = document.createElement('A');
+    a.href=fullSize;
+    a.className = 'carousel-image';
+    a.appendChild(img);
+    a.appendChild(title);
+
+    const li = document.createElement('LI');
+    li.appendChild(a);
+    container.appendChild(li);
   }
 
   function navigate(direction) {
@@ -87,7 +96,6 @@ This will return an object with a `hits` property, which will be an array of ima
         response.json().then(function(data) {
           if (data.hits) {
             data.hits.map(hit => {
-              console.log('hit',hit)
               images.push({
                 id : hit.id,
                 small : hit.webformatURL,
@@ -116,6 +124,9 @@ This will return an object with a `hits` property, which will be an array of ima
         button.onclick = () => navigate(button.className);
       });
     }
-  
+
+    window.addEventListener('breakpoint', reflow);
+    window.onresize = reflow; // ideally this would all be on the breakpoint listener
+    reflow();
   }
 })()
