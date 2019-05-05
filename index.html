@@ -10,10 +10,10 @@
             c.remove('p','d');
             if (q[1].matches) c.add('d');
             else if (q[0].matches) c.add('p');
-            //else c.add('d');
+            else c.add('d');
             //window.dispatchEvent(new Event('breakpoint'));
           }
-          for (i=0; i<3; i++){ f(q[i]); q[i].addListener(f); }
+          for (i=0; i<q.length; i++){ f(q[i]); q[i].addListener(f); }
         }
       })(window.matchMedia,document.documentElement.classList,'screen and (min-width:','px)')
     </script>
@@ -25,10 +25,8 @@
       <h1>Carousel Test</h1>
       <section class="carousel-container">
         <ul class="carousel-list">
-
-
-
         </ul>
+        <h2 class"show-on-error"></h2>
       </section>
       <section class="carousel-controls">
         <button type="button" class="prev"><span class="a11y-hide-on-mobile">Prev</span></button>

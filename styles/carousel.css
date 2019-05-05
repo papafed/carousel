@@ -66,10 +66,16 @@ button {
   list-style-type:none; 
   margin: 0;
   padding: 0;
+  white-space: nowrap;
 }
 
 .carousel-list li {
   display: inline-block;
+}
+
+.carousel-list img {
+  width: 320px;
+  height: 357px;
 }
 
 .carousel-controls {
@@ -83,3 +89,5 @@ button {
   padding: 100px;
   pointer-events: none;
 }
+
+.show-on-error { display: none; }
