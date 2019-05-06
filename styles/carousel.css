@@ -25,7 +25,14 @@ h1, h2 {
 }
 
 .p .a11y-hide-on-mobile {
-  display:none;
+  position: absolute; 
+  overflow: hidden; 
+  clip: rect(0 0 0 0); 
+  height: 1px; 
+  width: 1px; 
+  margin: -1px; 
+  padding: 0; 
+  border: 0; 
 }
 
 .show-on-error{ display: none; }
