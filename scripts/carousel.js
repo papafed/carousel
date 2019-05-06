@@ -31,25 +31,25 @@ This will return an object with a `hits` property, which will be an array of ima
   let images = [];
 
   function reflow() {
-   
-    appContainer.style.width='';
-    const width=appContainer.getBoundingClientRect().width;
     // how many images are completely visible on the screen? Resize container to fit.
-     appContainer.style.width = (Math.floor(width / imageWidth) * imageWidth) + 'px';
+    appContainer.style.width='';
+    const width = appContainer.getBoundingClientRect().width;
+    appContainer.style.width = (Math.floor(width / imageWidth) * imageWidth) + 'px';
   }
 
   function renderImages() {
     images.map(image => renderImage(image));
   }
 
-  function renderImage({id, small, tags, fullSize}) {
+  function renderImage({id, small, fullSize, user, likes}) {
     // while the spec said have a central active image the design contradicts that
     // by giving every image equal prominence.
     // and you can't have a central image if there is an even number visible 
     // Therefore lets make all images active, and link to a bigger version of themselves.
+
     const img = document.createElement('IMG');
     img.src=small;
-    img.alt=`${tags}`;
+    img.alt=`By ${user}. ${likes} likes.`;
     img.id=`image-${id}`;
 
     const title = document.createElement('H2');
@@ -105,10 +105,9 @@ This will return an object with a `hits` property, which will be an array of ima
               images.push({
                 id : hit.id,
                 small : hit.webformatURL,
-                height : hit.webformatHeight,
-                width : hit.webformatWidth,
                 fullSize : hit.largeImageURL,
-                tags : hit.tags
+                user : hit.user,
+                likes : hit.likes
               });
             });
             renderImages();
